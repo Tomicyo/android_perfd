@@ -9,3 +9,4 @@ set(PERFA_SRCS
 )
 
 add_library(perfa SHARED ${PERFA_SRCS})
+target_link_libraries(perfa protos)

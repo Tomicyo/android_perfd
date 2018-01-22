@@ -43,7 +43,7 @@ def build(config, abi, stl, sdk_platform, ndk_level, src, artifact_dir, addition
     
     config_mapping = {
         'debug': 'Debug',
-        'release': 'Release'
+        'release': 'MinSizeRel'
     }
     cmake_cmd = [find_cmake_exe(), 
         '-GAndroid Gradle - Ninja',
@@ -59,7 +59,17 @@ def build(config, abi, stl, sdk_platform, ndk_level, src, artifact_dir, addition
         '-DANDROID_STL={0}'.format(stl),
         '-DANDROID_CPP_FEATURES=rtti;exceptions',
         '-DCMAKE_BUILD_TYPE={0}'.format(config_mapping[config]),
-        '-DCMAKE_INSTALL_PREFIX={0}'.format(ins)
+        '-DCMAKE_INSTALL_PREFIX={0}'.format(ins),
+        '-DRUN_HAVE_STD_REGEX=1',
+        '-DRUN_HAVE_POSIX_REGEX=1',
+        '-DCMAKE_CROSSCOMPILING=1',
+        '-DgRPC_BUILD_TESTS=OFF',
+        '-DBENCHMARK_ENABLE_TESTING=OFF',
+        '-DRUN_HAVE_STEADY_CLOCK=1',
+        '-Dprotobuf_BUILD_TESTS=OFF',
+        '-Dprotobuf_BUILD_EXAMPLES=OFF',
+        '-DHAVE_POSIX_REGEX=ON',
+        '-DgRPC_INSTALL=ON',
         ]
     cmake_cmd.extend(additional_defs)
     P = subprocess.Popen(cmake_cmd)
