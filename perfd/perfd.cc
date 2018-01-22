@@ -17,6 +17,7 @@
 #include <cstring>
 #include "perfd/connector.h"
 #include "perfd/cpu/cpu_profiler_component.h"
+#include "perfd/gpu/gpu_profiler_component.h"
 #include "perfd/daemon.h"
 #include "perfd/event/event_profiler_component.h"
 #include "perfd/generic_component.h"
@@ -67,6 +68,9 @@ int main(int argc, char** argv) {
 
   profiler::CpuProfilerComponent cpu_component{&daemon.utilities()};
   daemon.RegisterComponent(&cpu_component);
+
+  profiler::GpuProfilerComponent gpu_component{&daemon.utilities()};
+  daemon.RegisterComponent(&gpu_component);
 
   profiler::MemoryProfilerComponent memory_component{&daemon.utilities()};
   daemon.RegisterComponent(&memory_component);

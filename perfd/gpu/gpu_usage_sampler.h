@@ -6,11 +6,16 @@
 #include <mutex>
 #include <unordered_set>
 
+#include "utils/clock.h"
+
 namespace profiler {
     class GpuUsageSampler {
     public:
-        GpuUsageSampler();
+        GpuUsageSampler(Daemon::Utilities* utilities);
         ~GpuUsageSampler();
+
+    private:
+        const Clock& clock_;
     };
 }
 

@@ -48,6 +48,15 @@ simpleperf_manager.cc
 thread_monitor.cc
 )
 
+add_mod(gpu
+gpu_collector.h
+gpu_service.h
+gpu_usage_sampler.h
+gpu_collector.cc
+gpu_service.cc
+gpu_usage_sampler.cc
+)
+
 add_mod(event
 event_cache.cc
 event_service.cc

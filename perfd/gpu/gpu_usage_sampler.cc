@@ -7,6 +7,7 @@
 
 #include "utils/file_reader.h"
 
+namespace profiler {
 using FQueryGpuUsage = std::functional<float(std::string const&)>;
 using FVendorGpuUsage = std::unordered_map<std::string, FQueryGpuUsage>;
 
@@ -24,3 +25,12 @@ static FVendorGpuUsage vendor_usage_parse = {
         }
     }}
 };
+
+GpuUsageSampler::GpuUsageSampler(Daemon::Utilities* utilities)
+: clock_(utilities_->clock())
+{}
+
+GpuUsageSampler::~GpuUsageSampler()
+{}
+
+}
