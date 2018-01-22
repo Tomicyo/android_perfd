@@ -113,10 +113,74 @@ speed_converter.h
 speed_sampler.h
 )
 
-add_executable(perfd ${LIBSRC} ${PD_SRCS})
+set(PROTO_SRCS 
+    ${PROF_PROTO_GENS_DIR}/agent_service.pb.cc
+    ${PROF_PROTO_GENS_DIR}/agent_service.grpc.pb.cc
+
+    ${PROF_PROTO_GENS_DIR}/cpu.pb.cc
+    ${PROF_PROTO_GENS_DIR}/cpu.grpc.pb.cc
+
+    ${PROF_PROTO_GENS_DIR}/event.pb.cc
+    ${PROF_PROTO_GENS_DIR}/event.grpc.pb.cc
+
+    ${PROF_PROTO_GENS_DIR}/graphics.pb.cc
+    ${PROF_PROTO_GENS_DIR}/graphics.grpc.pb.cc
+
+    ${PROF_PROTO_GENS_DIR}/internal_event.pb.cc
+    ${PROF_PROTO_GENS_DIR}/internal_event.grpc.pb.cc
+    
+    ${PROF_PROTO_GENS_DIR}/internal_memory.pb.cc
+    ${PROF_PROTO_GENS_DIR}/internal_memory.grpc.pb.cc
+
+    ${PROF_PROTO_GENS_DIR}/internal_network.pb.cc
+    ${PROF_PROTO_GENS_DIR}/internal_network.grpc.pb.cc
+
+    ${PROF_PROTO_GENS_DIR}/io.pb.cc
+    ${PROF_PROTO_GENS_DIR}/io.grpc.pb.cc
+
+    ${PROF_PROTO_GENS_DIR}/memory.pb.cc
+    ${PROF_PROTO_GENS_DIR}/memory.grpc.pb.cc
+
+    ${PROF_PROTO_GENS_DIR}/network.pb.cc
+    ${PROF_PROTO_GENS_DIR}/network.grpc.pb.cc
+
+    ${PROF_PROTO_GENS_DIR}/profiler.pb.cc
+    ${PROF_PROTO_GENS_DIR}/profiler.grpc.pb.cc
+    
+    ${PROF_PROTO_GENS_DIR}/profiler_service.pb.cc
+    ${PROF_PROTO_GENS_DIR}/profiler_service.grpc.pb.cc
+
+    ${PROF_PROTO_GENS_DIR}/simplerperf_report.pb.cc
+    ${PROF_PROTO_GENS_DIR}/simplerperf_report.grpc.pb.cc
+)
+set_source_files_properties(${PROTO_SRCS} PROPERTIES GENERATED TRUE)
+
+add_executable(perfd ${LIBSRC} ${PD_SRCS} ${PROTO_SRCS})
+
 target_link_libraries(perfd
 perf_utils
-grpc
+${AndroPerf_SOURCE_DIR}/depend/lib/libgpr.a
+${AndroPerf_SOURCE_DIR}/depend/lib/libgrpc.a
+${AndroPerf_SOURCE_DIR}/depend/lib/libgrpc_unsecure.a
+${AndroPerf_SOURCE_DIR}/depend/lib/libgrpc_cronet.a
 grpc++
-libprotobuf
+${AndroPerf_SOURCE_DIR}/depend/lib/libprotobuf.a
+log
+)
+
+set_property(TARGET perfd PROPERTY CXX_STANDARD 14)
+target_add_proto(perfd PROTOS
+  ../protos/agent_service.proto
+  ../protos/cpu.proto
+  ../protos/event.proto
+  ../protos/graphics.proto
+  ../protos/internal_event.proto
+  ../protos/internal_memory.proto
+  ../protos/internal_network.proto
+  ../protos/io.proto
+  ../protos/memory.proto
+  ../protos/network.proto
+  ../protos/profiler.proto
+  ../protos/profiler_service.proto
+  ../protos/simplerperf_report.proto
 )

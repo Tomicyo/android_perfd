@@ -54,10 +54,15 @@ tokenizer.h
 trace.h
 trie.h
 uid_fetcher.h
+
+clock.cc
+current_process.linux.cc
+filesystem_notifier.cc
+thread_name.cc
 )
 
 if(ANDROID)
-    list(APPEND perf_utils log.android.cc log.cc)
+    list(APPEND PERFU_SRCS log.android.cc log.cc)
 endif()
 
 add_library(perf_utils ${PERFU_SRCS})
