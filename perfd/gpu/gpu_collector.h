@@ -5,6 +5,8 @@
 #include <cstdint>
 #include <thread>
 
+#include "gpu_usage_sampler.h"
+
 namespace profiler {
     class GpuCollector {
     public:

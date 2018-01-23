@@ -13,9 +13,12 @@ namespace profiler {
     }
 
     grpc::Status GpuServiceImpl::GetData(ServerContext* context, const GpuDataRequest* request, GpuDataResponse* response) {
-        GpuData data;
-        data.set_utilization(1.0f);
-        *(response->mutable_data()) = data;
+        Trace trace("GPU:GetData");
+        const vector<GpuData>& data =
+            cache_.Retrieve(id, request->start_timestamp(), request->end_timestamp());
+        for (const auto& datum : data) {
+            *(response->add_data()) = datum;
+        }
         return Status::OK;
     }
 }

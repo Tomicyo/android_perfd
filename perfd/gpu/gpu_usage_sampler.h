@@ -14,8 +14,11 @@ namespace profiler {
         GpuUsageSampler(Daemon::Utilities* utilities);
         ~GpuUsageSampler();
 
+        bool Sample();
     private:
         const Clock& clock_;
+        // Cache where collected data will be saved.
+        CpuCache& cache_;
     };
 }
 
