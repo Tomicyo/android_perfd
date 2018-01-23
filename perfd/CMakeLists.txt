@@ -52,9 +52,11 @@ add_mod(gpu
 gpu_collector.h
 gpu_service.h
 gpu_usage_sampler.h
+gpu_cache.h
 gpu_collector.cc
 gpu_service.cc
 gpu_usage_sampler.cc
+gpu_cache.cc
 )
 
 add_mod(event

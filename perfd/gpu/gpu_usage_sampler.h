@@ -6,19 +6,21 @@
 #include <mutex>
 #include <unordered_set>
 
+#include "perfd/daemon.h"
+#include "gpu_cache.h"
 #include "utils/clock.h"
 
 namespace profiler {
     class GpuUsageSampler {
     public:
-        GpuUsageSampler(Daemon::Utilities* utilities);
+        GpuUsageSampler(Daemon::Utilities* utilities, GpuCache *cache);
         ~GpuUsageSampler();
 
         bool Sample();
     private:
         const Clock& clock_;
         // Cache where collected data will be saved.
-        CpuCache& cache_;
+        GpuCache& cache_;
     };
 }
 

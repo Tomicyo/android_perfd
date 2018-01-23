@@ -31,14 +31,14 @@ bool GpuCache::DeallocateAppCache(int32_t app_id) {
 
 bool GpuCache::Add(const GpuData& datum) {
   int32_t app_id = datum.basic_info().process_id();
-  auto* found = FindAppCache(app_id);
+  auto* found = FindAppCache(app_id); // default to 0
   if (found == nullptr) return false;
   found->usage_cache.Add(datum, datum.basic_info().end_timestamp());
   return true;
 }
 
 vector<GpuData> GpuCache::Retrieve(int64_t from, int64_t to) {
-  auto* found = FindAppCache(app_id);
+  auto* found = FindAppCache(0);
   if (found == nullptr) {
     vector<GpuData> empty;
     return empty;
@@ -46,7 +46,7 @@ vector<GpuData> GpuCache::Retrieve(int64_t from, int64_t to) {
   return found->usage_cache.GetValues(from, to);
 }
 
-GpuCache::AppGpuCache* CpuCache::FindAppCache(int32_t app_id) {
+GpuCache::AppGpuCache* GpuCache::FindAppCache(int32_t app_id) {
   for (auto& cache : app_caches_) {
     if (app_id == cache->app_id) {
       return cache.get();

@@ -7,8 +7,10 @@
 
 #include "utils/file_reader.h"
 
+using profiler::proto::GpuData;
+
 namespace profiler {
-using FQueryGpuUsage = std::functional<float(std::string const&)>;
+using FQueryGpuUsage = std::function<float(std::string const&)>;
 using FVendorGpuUsage = std::unordered_map<std::string, FQueryGpuUsage>;
 
 static FVendorGpuUsage vendor_usage_parse = {
@@ -34,8 +36,9 @@ static FVendorGpuUsage vendor_usage_parse = {
     }}
 };
 
-GpuUsageSampler::GpuUsageSampler(Daemon::Utilities* utilities)
-: clock_(utilities_->clock())
+GpuUsageSampler::GpuUsageSampler(Daemon::Utilities* utilities, GpuCache* cache)
+: clock_(utilities->clock())
+, cache_(*cache)
 {}
 
 GpuUsageSampler::~GpuUsageSampler() {
@@ -43,6 +46,11 @@ GpuUsageSampler::~GpuUsageSampler() {
 }
 
 bool GpuUsageSampler::Sample() {
+    GpuData data;
+    data.set_utilization(0.88f);
+    data.mutable_basic_info()->set_process_id(0);
+    data.mutable_basic_info()->set_end_timestamp(clock_.GetCurrentTime());
+    cache_.Add(data);
     return true;
 }
 

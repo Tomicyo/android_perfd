@@ -26,8 +26,7 @@ class GpuProfilerComponent final : public ProfilerComponent {
   // Creates a CPU perfd component and starts sampling right away.
   explicit GpuProfilerComponent(Daemon::Utilities* utilities)
       : clock_(utilities->clock()),
-        usage_sampler_(utilities, &cache_),
-        thread_monitor_(utilities, &cache_) {
+        usage_sampler_(utilities, &cache_) {
     collector_.Start();
   }
 
@@ -39,13 +38,11 @@ class GpuProfilerComponent final : public ProfilerComponent {
 
  private:
   const Clock& clock_;
-  CpuCache cache_{kBufferCapacity};
+  GpuCache cache_{kBufferCapacity};
   GpuUsageSampler usage_sampler_;
-  ThreadMonitor thread_monitor_;
-  GpuCollector collector_{kDefaultCollectionIntervalUs, &usage_sampler_,
-                          &thread_monitor_};
-  GpuServiceImpl public_service_{clock_, &cache_, &usage_sampler_,
-                                 &thread_monitor_};
+  // gpu collector
+  GpuCollector collector_{kDefaultCollectionIntervalUs, &usage_sampler_};
+  GpuServiceImpl public_service_{clock_, &cache_, &usage_sampler_};
 };
 
 }

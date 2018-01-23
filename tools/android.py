@@ -81,20 +81,8 @@ def build(config, abi, stl, sdk_platform, ndk_level, src, artifact_dir, addition
         '--target', 'perfd'
         ])
     B.wait()
-
-#    artifact_dir = os.path.join(src, 'artifacts', '_'.join([abi,stl]))
-    artifact_incdir = os.path.join(artifact_dir, 'include')
-    artifact_libdir = os.path.join(artifact_dir, 'lib', '_'.join([abi,stl,config]))
-    copy_files(os.path.join(ins, 'include'), artifact_incdir)
-    copy_files_by_ext(os.path.join(ins, 'lib'), '.a', artifact_libdir)
     
 def build_android_instance(abi, stl, additional_defs=[]):
     src = os.getcwd()
     artifact_dir = os.path.join(src, 'artifacts', '_'.join([abi,stl]))
     build('release', abi, stl, 21, 21, src, artifact_dir, additional_defs)
-    #build('debug', abi, stl, 19, 19, src, artifact_dir, additional_defs)
-    copy_files_by_ext(os.path.join(src, 'tools'), '.cmake', os.path.join(artifact_dir, 'lib', 'cmake'))
-    archive_name = os.path.join(os.getcwd(), 'artifacts', 'third_party_android_' + '_'.join([abi, stl]) +'.zip')
-    zipf = zipfile.ZipFile(archive_name, 'w', zipfile.ZIP_DEFLATED)
-    zipdir(os.path.join(os.getcwd(), 'artifacts', '_'.join([abi, stl])), zipf)
-    zipf.close()

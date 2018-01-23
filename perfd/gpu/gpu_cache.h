@@ -32,9 +32,11 @@ class GpuCache {
  private:
   // Each app's cache held by CPU component in the on-device daemon.
   struct AppGpuCache {
+    int32_t app_id;
     TimeValueBuffer<profiler::proto::GpuData> usage_cache;
     AppGpuCache(int32_t app_id, int32_t capacity)
-        : usage_cache(capacity, app_id) {}
+        : app_id(app_id)
+        , usage_cache(capacity, app_id) {}
   };
 
   // Returns the raw pointer to the cache for a given app. Returns null if

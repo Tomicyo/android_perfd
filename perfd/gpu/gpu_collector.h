@@ -10,10 +10,8 @@
 namespace profiler {
     class GpuCollector {
     public:
-        GpuCollector(int64_t interval_in_us, CpuUsageSampler* usage_sampler,
-                    ThreadMonitor* thread_monitor)
+        GpuCollector(int64_t interval_in_us, GpuUsageSampler* usage_sampler)
             : usage_sampler_(*usage_sampler),
-              thread_monitor_(*thread_monitor),
               sampling_interval_in_us_(interval_in_us) {}
 
         ~GpuCollector();
@@ -34,9 +32,7 @@ namespace profiler {
         // True if sampling operations is running.
         std::atomic_bool is_running_{false};
         // Holder of sampler operations.
-        //CpuUsageSampler& usage_sampler_;
-        // Monitor of thread activities.
-        //ThreadMonitor& thread_monitor_;
+        GpuUsageSampler& usage_sampler_;
         // Sampling window size in microseconds.
         int64_t sampling_interval_in_us_;
     };
