@@ -1,6 +1,7 @@
 #include "gpu_usage_sampler.h"
 
-#include <string>
+#include <unistd.h>
+#include <errno.h>
 #include <vector>
 #include <unordered_map>
 #include <functional>
@@ -39,15 +40,36 @@ static FVendorGpuUsage vendor_usage_parse = {
 GpuUsageSampler::GpuUsageSampler(Daemon::Utilities* utilities, GpuCache* cache)
 : clock_(utilities->clock())
 , cache_(*cache)
-{}
+{
+    for(auto& pair : vendor_usage_parse)
+    {
+        std::string& path = pair->first;
+        int fd = open(path.c_str(), O_RDONLY);
+        if(fd != -1)
+        {
+            driver_stat_file_ = path;
+            close(fd);
+            break;
+        }
+        else
+        {
+            if(errno == EACCES)
+            {
+                // permission denied or not exists !
+            }
+        }
+    }
+}
 
 GpuUsageSampler::~GpuUsageSampler() {
-    
 }
 
 bool GpuUsageSampler::Sample() {
     GpuData data;
-    data.set_utilization(0.88f);
+    if(!driver_stat_file_.empty()) {
+        float usage = vendor_usage_parse[driver_stat_file_](driver_stat_file_);
+        data.set_utilization(usage);
+    }
     data.mutable_basic_info()->set_process_id(0);
     data.mutable_basic_info()->set_end_timestamp(clock_.GetCurrentTime());
     cache_.Add(data);

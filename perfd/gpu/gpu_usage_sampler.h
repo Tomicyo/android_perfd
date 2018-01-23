@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <memory>
 #include <mutex>
+#include <string>
 #include <unordered_set>
 
 #include "perfd/daemon.h"
@@ -21,6 +22,7 @@ namespace profiler {
         const Clock& clock_;
         // Cache where collected data will be saved.
         GpuCache& cache_;
+        std::string driver_stat_file_;
     };
 }
 
